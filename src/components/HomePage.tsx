@@ -1,28 +1,31 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:4130556497.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:1085865764.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:4196869150.
-import { useQuery } from "@tanstack/react-query"
 
+import { useQuery } from "@tanstack/react-query"
+import axios from "axios"
 type Props = {}
+
+type UserType = {
+    id: number,
+    name: string,
+    username: string,
+    email: string
+}
 
 const HomePage = (props: Props) => {
 
-    const res = useQuery({
+    const fetchUser = () => axios.get("https://jsonplaceholder.typicode.com/users");
+
+    const { data, isLoading } = useQuery({
         queryKey: ["users"],
-        queryFn: () => {
-            return fetch("https://jsonplaceholder.typicode.com/users")
-                .then(res => {
-                    if (!res.ok) throw new Error("Network response was not ok");
-                    return res.json()
-                })
-        }
+        queryFn: fetchUser
     }
     );
 
-    console.log(res)
+    console.log({ data, isLoading })
+
+    if (isLoading) return <h1>Loading...</h1>
 
     return (
-        <div>HomePage</div>
+        <div>{data?.data.map((i: UserType) => <div key={i.id}>{i.name}</div>)}</div>
     )
 }
 
