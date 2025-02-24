@@ -1,22 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams as useParamsHook } from "react-router-dom";
+import { useUserDetailsQuery } from "../hooks/queryies";
 
 type Props = {}
 
 const UserDetails = (props: Props) => {
     const { id } = useParamsHook<{ id: string }>();
 
-    const fetchUserDetails = ({ queryKey }: { queryKey: [string, string] }) => {
-        const [, id] = queryKey;
-        return axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
-
-    }
-
-    const { data , isLoading , isError } = useQuery({
-        queryKey: ["users", id!],
-        queryFn: fetchUserDetails,
-    });
+       const { data , isLoading , isError } = useUserDetailsQuery(id)
     return (
         <div>
             <h2>UserDetails - {id ? id : 'Unknown'}</h2>

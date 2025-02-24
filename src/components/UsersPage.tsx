@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { Link } from "react-router-dom"
+import { useUsersQuery } from "../hooks/queryies"
 type Props = {}
 
 type UserType = {
@@ -11,17 +12,7 @@ type UserType = {
 }
 
 const UsersPage = (props: Props) => {
-
-    const fetchUser = () => axios.get("https://jsonplaceholder.typicode.com/users");
-
-    const { data, isLoading } = useQuery({
-        queryKey: ["users"],
-        queryFn: fetchUser
-    }
-    );
-
-    console.log({ data, isLoading })
-
+    const { data, isLoading } = useUsersQuery();
     if (isLoading) return <h1>Loading...</h1>
 
     return (
